@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const rupture = require('rupture')
 
 module.exports = {
   target: 'web',
@@ -24,7 +25,7 @@ module.exports = {
         exclude: [/node_modules/],
       },
       {
-        test: /\.styl$/,
+        test:[ /\.styl$/, /\.css$/],
         loader: 'style-loader!css-loader!stylus-loader'
       }
     ]
@@ -38,7 +39,7 @@ module.exports = {
       test: /\.styl$/,
       options: {
         stylus: {
-          // use: [rupture(), koutoSwiss(), jeet(), mdiStylus()],
+          use: [rupture()],
           compress: false
         }
       }
