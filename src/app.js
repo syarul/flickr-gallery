@@ -92,15 +92,15 @@ class Gallery extends Component {
   render() {
     return (
       <div>
-      	<div className='inputList'>
-      		<input 
+        <div className='inputList'>
+          <input 
             className='search' 
             value={this.state.searchInput} 
             onChange={this.handleChange.bind(this)} 
             onKeyPress={this.keyPress.bind(this)} />
           <input type='button' value='X' onClick={this.clearSearchInput.bind(this)} />
           <input type='submit' onClick={this.queryValue.bind(this)} />
-      	</div>
+        </div>
         <FilterType 
           setLicense={this.setLicense.bind(this)} 
           setSafeSearch={this.setSafeSearch.bind(this)} 
