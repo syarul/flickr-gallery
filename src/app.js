@@ -28,10 +28,7 @@ class Gallery extends Component {
     if (!this.state.searchInput.length) return
 
     // clean up images state before making new request
-    this.setState({
-      images:[],
-      activePage: 1
-    })
+    this.setState({images:[]})
     this.requestImages(this.state.searchInput)
   }
   keyPress(evt){
