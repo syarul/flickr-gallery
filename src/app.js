@@ -19,6 +19,9 @@ class Gallery extends Component {
   }
   handleChange(event) {
     this.setState({searchInput: event.target.value})
+    if(event.target.value.length){
+      this.setState({activePage:1})
+    }
   }
   clearSearchInput() {
     this.setState({searchInput:''})
