@@ -1,30 +1,8 @@
-// import 'regenerator-runtime'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-
 import Pagination from 'react-js-pagination'
-
-import Dropdown from 'react-dropdown'
-import 'react-dropdown/style.css'
-
-import './base.styl'
-
-window.log = console.log.bind(console)
-
-const license = [
-  { value: '', label: 'Any license' },
-  { value: '2%2C3%2C4%2C5%2C6%2C9', label: 'All creative commons' }
-]
-
-const licenseDefault = license[0]
-
-const safeSearch = [
-  { value: '', label: 'SafeSearch on' },
-  { value: '2', label: 'SafeSearch moderate' },
-  { value: '3', label: 'SafeSearch off' }
-]
-
-const safeSearchDefault = safeSearch[0]
+import FilterType from './filterType'
+import './style/base.styl'
 
 class Gallery extends Component {
   constructor () {
@@ -34,14 +12,10 @@ class Gallery extends Component {
       images:[],
       activePage: 1,
       totalItemsCount: 0,
-      colorCodes: ''
+      colorCodes: '',
+      licence: '',
+      safeSearch:''
     }
-
-    this.handleChange = this.handleChange.bind(this)
-    this.clearSearchInput = this.clearSearchInput.bind(this)
-    this.queryValue = this.queryValue.bind(this)
-    this.keyPress = this.keyPress.bind(this)
-    this.handlePageChange = this.handlePageChange.bind(this)
   }
   handleChange(event) {
     this.setState({searchInput: event.target.value})
@@ -77,10 +51,12 @@ class Gallery extends Component {
 
     uri = !this.state.colorCodes ? uri : uri + `&color_codes=${this.state.colorCodes}`
 
+    uri = !this.state.licence ? uri : uri + `&licence=${this.state.licence}`
+
+    uri = !this.state.safeSearch ? uri : uri + `&safe_search=${this.state.safeSearch}`
+
     const res = await fetch(uri)
     const json = await res.json()
-    log(uri)
-    // log(JSON.stringify(json, false, 2))
 
     this.setState({totalItemsCount: json.photos.total})
 
@@ -91,7 +67,6 @@ class Gallery extends Component {
       let secret = gp.secret
       this.setState({images:[...this.state.images, `https://farm${farmId}.staticflickr.com/${serverId}/${id}_${secret}.jpg`]})
     })
-
   }
   createImage(image, i) {
     return <div className='imageContainer' key={i} style={{height:'300px'}}><img src={image} alt={'image'} /></div>
@@ -106,10 +81,10 @@ class Gallery extends Component {
     this.setState({colorCodes: color}, () => this.queryValue())
   }
   setLicense(code){
-    log(code)
+    this.setState({licence: code.value}, () => this.queryValue())
   }
   setSafeSearch(code){
-    log(code)
+    this.setState({safeSearch: code.value}, () => this.queryValue())
   }
   render() {
     return (
@@ -118,20 +93,15 @@ class Gallery extends Component {
       		<input 
             className='search' 
             value={this.state.searchInput} 
-            onChange={this.handleChange} 
-            onKeyPress={this.keyPress} />
-          <input type='button' value='X' onClick={this.clearSearchInput} />
-          <input type='submit' onClick={this.queryValue} />
+            onChange={this.handleChange.bind(this)} 
+            onKeyPress={this.keyPress.bind(this)} />
+          <input type='button' value='X' onClick={this.clearSearchInput.bind(this)} />
+          <input type='submit' onClick={this.queryValue.bind(this)} />
       	</div>
-        <div id='filterType'>
-          <Dropdown className='license' options={license} onChange={this._onSelect, value => this.setLicense.call(this, value)} value={licenseDefault} />
-        	<Dropdown className='safeSearch' options={safeSearch} onChange={this._onSelect, value => this.setSafeSearch.call(this, value)} value={safeSearchDefault} />
-
-          <span className='clr' onClick={this.setColor.bind(this, '0')} style={{background:'#ff2000'}} title='Red'></span>
-          <span className='clr' onClick={this.setColor.bind(this, 'b')} style={{background:'#ff9f9c'}} title='Pink'></span>
-          <span className='clr' onClick={this.setColor.bind(this, '6')} style={{background:'#00ab00'}} title='Lime Green'></span>
-          <span className='clr' onClick={this.setColor.bind(this, '8')} style={{background:'#0062c6'}} title='Blue'></span>
-        </div>
+        <FilterType 
+          setLicense={this.setLicense.bind(this)} 
+          setSafeSearch={this.setSafeSearch.bind(this)} 
+          setColor={this.setColor.bind(this)} />
         <div id='imageGallery'>
           {this.createImages(this.state.images)}
         </div>
@@ -140,7 +110,7 @@ class Gallery extends Component {
           itemsCountPerPage={12}
           totalItemsCount={this.state.totalItemsCount}
           pageRangeDisplayed={5}
-          onChange={this.handlePageChange}
+          onChange={this.handlePageChange.bind(this)}
         />
       </div>
     );
