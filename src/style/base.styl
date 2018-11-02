@@ -16,14 +16,19 @@
 #filterType
   margin-top 14px
   display flex
-  span
-    border-radius 3px
-    padding 0 4px
-    margin-left 12px
-    cursor pointer
-    background #eee
-    &:first-child
-      margin-left 20px
+  flex-wrap wrap
+  #colorCode
+    +below(560px)
+      height 40px
+      margin-top 10px
+    span
+      border-radius 3px
+      padding 0 4px
+      margin-left 12px
+      cursor pointer
+      background #eee
+      &:first-child
+        margin-left 20px
 
 #imageGallery
   margin-top 20px
@@ -63,6 +68,8 @@
   align-items center
   justify-content center
   font-size 1.2em
+  +below(700px)
+    padding-left 0
   li 
     padding 4px 12px
     height 20px
