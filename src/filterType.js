@@ -59,7 +59,7 @@ export default class FilterType extends Component {
           onChange={this._onSelect, value => this.changeLicense.call(this, value)} 
           value={this.state.defaultValue} />
         <Dropdown className='safeSearch' 
-        	options={safeSearch} onChange={this._onSelect, value => this.props.setSafeSearch.call(this, value)} 
+        	options={safeSearch} onChange={this._onSelect, value => this.changeSafeSearch.call(this, value)} 
         	value={this.state.safeSearchDefault} />
         <ColorCode setColor={this.setColor.bind(this)} />
       </div>
